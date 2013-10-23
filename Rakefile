@@ -2,7 +2,7 @@
   require file
 end
 
-#VERSION = '1.0.0.alpha2'
+#VERSION = '1.0.0.alpha3'
 VERSION = '1.0-SNAPSHOT'
 BASE_DIR = File.expand_path('.', File.dirname(__FILE__)) 
 TARGET_DIR  = "#{BASE_DIR}/target" 
@@ -38,8 +38,8 @@ end
 desc 'run integration tests (on travis)'
 task :integration_test do
   Bundler.with_clean_env do
-    unless system("bundle install --gemfile=files/Gemfile --verbose")
-      fail "Could not install Bill's Kitchen gems specified in files/Gemfile"
+    unless system("bundle install --no-deployment --gemfile=BillsKitchenGemfile --verbose")
+      fail "Could not install Bill's Kitchen gems specified in BillsKitchenGemfile"
     end
   end
 end
@@ -120,7 +120,7 @@ def download_tools
     %w{ switch.dl.sourceforge.net/project/kdiff3/kdiff3/0.9.96/KDiff3Setup_0.9.96.exe             kdiff3 
         kdiff3.exe },
     %w{ the.earth.li/~sgtatham/putty/0.62/x86/putty.zip                                           putty },
-    %w{ http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi   vagrant }
+    %w{ files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi   vagrant }
   ]
   .each do |host_and_path, target_dir, includes = ''|
     download_and_unpack "http://#{host_and_path}", "#{BUILD_DIR}/tools/#{target_dir}", includes.split('|')    
@@ -145,6 +145,7 @@ end
 def install_vagrant_plugins
   Bundler.with_clean_env do
     command = "#{BUILD_DIR}/set-env.bat \
+    && vagrant plugin install bindler --plugin-version 0.1.3 \
       && vagrant plugin install vagrant-omnibus --plugin-version 1.1.0 \
       && vagrant plugin install #{BUILD_DIR}/install/vagrant-aws-0.2.2.rsyncfix.gem \
       && vagrant plugin install vagrant-awsinfo --plugin-version 0.0.8 \
@@ -153,7 +154,8 @@ def install_vagrant_plugins
       && vagrant plugin install vagrant-plugin-bundler --plugin-version 0.1.1 \
       && vagrant plugin install vagrant-berkshelf --plugin-version 1.3.3 \
       && vagrant plugin install vagrant-hostmaster --plugin-version 0.8.1 \
-      && vagrant plugin install vagrant-vbguest --plugin-version 0.8.0"
+      && vagrant plugin install vagrant-vbguest --plugin-version 0.8.0" \
+      && vagrant bindler setup"
     fail "vagrant plugin installation failed" unless system(command)
   end
 end
@@ -167,10 +169,19 @@ def install_gems
       && git config --global --unset user.name \
       && git config --global --unset user.email \
       && gem install bundler -v 1.3.5 --no-ri --no-rdoc \
-      && bundle install --gemfile=#{BUILD_DIR}/Gemfile --verbose"
+      && bundle install --gemfile=#{BASE_DIR}/BillsKitchenGemfile --verbose"
     fail "gem installation failed" unless system(command)
   end
 end
+
+=begin
+def setup_samples
+  * clone sample app
+  * run vagrant plugin bundle
+  * run bundle install
+  * run rake test 
+end
+=end
 
 def clone_repositories
   [ 

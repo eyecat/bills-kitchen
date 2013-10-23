@@ -1,8 +1,18 @@
 
-# [1.0-SNAPSHOT]
+# [1.0-SNAPSHOT] - unreleased
 
+ * set `ANSICON` env var so that Vagrant uses colored output on Windows
+ * update to Chef 11.6.2
+ * update to Vagrant 1.3.5
+
+# [1.0.0.alpha3] from 10/05/2013
+
+ * enable caching of omnibus packages [via custom install.sh](https://github.com/fgrehm/vagrant-cachier/issues/13#issuecomment-25320554)
+ * remove all pre-installed vagrant-plugins in favor of [bindler](https://github.com/fgrehm/bindler)
+ * remove all pre-installed gems (except chef and some knife plugins) and `W:\Gemfile` in favor of project-specific Gemfiles
  * tool updates:
-  * updated Vagrant to 1.2.4
+  * updated Vagrant to 1.3.4
+
 
 # [1.0.0.alpha2] from 07/15/2013
 
@@ -15,7 +25,7 @@
   * updated vagrant-cachier to 0.2.0
   * updated vagrant-berkshelf to 1.3.3 
 
-# [1.0.0.alpha1] (unpublished)
+# [1.0.0.alpha1 (unpublished)]
  
  * switch to SemVer versioning scheme for bills-kitchen, target 1.0 release soon
  * updated to **Vagrant 1.2**, **Chef 11** and **Berkshelf** (see below for details)
