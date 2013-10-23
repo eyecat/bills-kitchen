@@ -120,7 +120,7 @@ def download_tools
     %w{ switch.dl.sourceforge.net/project/kdiff3/kdiff3/0.9.96/KDiff3Setup_0.9.96.exe             kdiff3 
         kdiff3.exe },
     %w{ the.earth.li/~sgtatham/putty/0.62/x86/putty.zip                                           putty },
-    %w{ files.vagrantup.com/packages/0219bb87725aac28a97c0e924c310cc97831fd9d/Vagrant_1.2.4.msi   vagrant }
+    %w{ http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi   vagrant }
   ]
   .each do |host_and_path, target_dir, includes = ''|
     download_and_unpack "http://#{host_and_path}", "#{BUILD_DIR}/tools/#{target_dir}", includes.split('|')    
@@ -152,6 +152,7 @@ def install_vagrant_plugins
       && vagrant plugin install vagrant-cachier --plugin-version 0.2.0 \
       && vagrant plugin install vagrant-plugin-bundler --plugin-version 0.1.1 \
       && vagrant plugin install vagrant-berkshelf --plugin-version 1.3.3 \
+      && vagrant plugin install vagrant-hostmaster --plugin-version 0.8.1 \
       && vagrant plugin install vagrant-vbguest --plugin-version 0.8.0"
     fail "vagrant plugin installation failed" unless system(command)
   end
